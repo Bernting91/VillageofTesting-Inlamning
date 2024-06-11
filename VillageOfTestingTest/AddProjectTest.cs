@@ -52,13 +52,25 @@ namespace VillageOfTestingTest
         public void AddCastleProjectToWin()
         {
             _village.Projects.Clear();
-            _village.Wood = 100;
-            _village.Metal = 100;
-            string projectName = "Castle";
-            _village.AddProject(projectName);
-            Assert.Contains(_village.Projects, p => p.Name == projectName);
+            _village.AddWorker("Robert", "builder");
+            _village.AddWorker("Karl", "farmer");
+            _village.AddWorker("Charles", "miner");
+            _village.AddWorker("Gnarles", "lumberjack");
 
-            int maxDays = 1000;
+            string projectName = "Castle";
+
+            while (_village.Wood < 50 || _village.Metal < 50)
+            {
+                _village.Day();
+            }
+
+            if (_village.Wood >= 50 && _village.Metal >= 50)
+            {
+                _village.AddProject(projectName);
+                Assert.Contains(_village.Projects, p => p.Name == projectName);
+            }
+
+            int maxDays = 51;
             for (int i = 0; i < maxDays && _village.Projects.Any(p => p.Name == projectName && p.DaysLeft > 0); i++)
             {
                 _village.Day();
